@@ -60,7 +60,6 @@ int main(int argc, char** argv)
 
 
 	}
-	getchar();
 	return 0;
 }
 /*
@@ -87,6 +86,11 @@ int validOption(char** argv, FILE** copyFrom)
 		return FALSE;
 	}
 }
+/*
+This function copies text files
+Input: the file pointer and the destination file name
+Output: None
+*/
 void textCopy(FILE* inputFile, char* output)
 {
 	int currentCharacter = 0;
@@ -112,22 +116,40 @@ void textCopy(FILE* inputFile, char* output)
 	}
 
 }
+/*
+This function copies binary files
+Input: the file to copy from and the output file name
+Output: None
+*/
 void binaryCopy(FILE* inputFile, char* output)
 {
 	char* arr = 0;
-	fseek(inputFile, 0, SEEK_END);
-	arr = malloc(ftell(inputFile)+1);
-	arr[ftell(inputFile)] = 0; // make it a string
-	fseek(inputFile, 0, SEEK_SET); //GO BACK
-	do
+	int i = 0;
+	FILE* outputFile = fopen(output, "wb");
+	FILE* check = fopen(output, "r"); // this line tries to open the entered output file. I used "r" mode because if i use "w" it will create it
+	if (fileDoesntExist(check)) // if the file doesn't exist, read from it
 	{
-		fread(arr, sizeof(char), 1, inputFile);
-	} while (fread(arr, sizeof(char), 1, inputFile) == 1);	
-	printf("%s", arr);
+		fseek(inputFile, 0, SEEK_END);
+		int length = ftell(inputFile) * sizeof(char);
+		arr = (char*)malloc(length);
+
+		fseek(inputFile, 0, SEEK_SET); //GO BACK
+		fread(arr, 1, length, inputFile);
+
+		fseek(inputFile, 0, SEEK_SET); //GO BACK
+		fwrite(arr, 1, length, outputFile);
+	}
 	free(arr);
+	if (!check) { fclose(check); }
+	fclose(outputFile);
+	printf("Copy completed.");
 }
 
-
+/*
+This function cheks if a file already exist
+Input: The file pointer
+Output: true if the file doesn't exist false otherwise
+*/
 int fileDoesntExist(FILE* filename)
 {
 	int choice = -1;
