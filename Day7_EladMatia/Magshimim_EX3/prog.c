@@ -17,10 +17,16 @@
 
 int canConitnue = FALSE;
 
+<<<<<<< Updated upstream
 int validOption(char** argv, FILE** copyFrom);
 void textCopy(FILE* inputFile, char* output);
 int fileDoesntExist(FILE* filename);
 void binaryCopy(FILE* inputFile, char* output);
+=======
+int validOption(char** argv);
+int fileDoesntExist(FILE* filename);
+void textCopy(char** argv, FILE* inputFile, char* output);
+>>>>>>> Stashed changes
 
 int main(int argc, char** argv)
 {
@@ -93,9 +99,14 @@ Output: None
 */
 void textCopy(FILE* inputFile, char* output)
 {
+<<<<<<< Updated upstream
 	int currentCharacter = 0;
 	FILE* check = fopen(output, "r"); // this line tries to open the entered output file. I used "r" mode because if i use "w" it will create it
 	if (fileDoesntExist(check)) // if the file doesn't exist, read from it
+=======
+	FILE* outputFile = fopen(output, "w");
+	if (fileDoesntExist(outputFile))
+>>>>>>> Stashed changes
 	{
 		FILE* outputFile = fopen(output, "w");
 		do
