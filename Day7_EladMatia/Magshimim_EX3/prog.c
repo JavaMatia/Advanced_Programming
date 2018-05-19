@@ -125,10 +125,10 @@ void binaryCopy(FILE* inputFile, char* output)
 {
 	char* arr = 0;
 	int i = 0;
-	FILE* outputFile = fopen(output, "wb");
 	FILE* check = fopen(output, "r"); // this line tries to open the entered output file. I used "r" mode because if i use "w" it will create it
 	if (fileDoesntExist(check)) // if the file doesn't exist, read from it
 	{
+		FILE* outputFile = fopen(output, "wb");
 		fseek(inputFile, 0, SEEK_END);
 		int length = ftell(inputFile) * sizeof(char);
 		arr = (char*)malloc(length);
@@ -138,10 +138,13 @@ void binaryCopy(FILE* inputFile, char* output)
 
 		fseek(inputFile, 0, SEEK_SET); //GO BACK
 		fwrite(arr, 1, length, outputFile);
+		fclose(outputFile);
 	}
 	free(arr);
-	if (!check) { fclose(check); }
-	fclose(outputFile);
+	if (check != NULL) 
+	{	
+		fclose(check);
+	}
 	printf("Copy completed.");
 }
 
