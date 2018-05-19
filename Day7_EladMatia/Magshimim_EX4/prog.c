@@ -10,7 +10,7 @@
 #include <string.h>
 
 #define LENGTH 250
-#define EXIT 2
+#define EXIT 4
 
 int getLine(char* file, char* find);
 void myFgets(char str[], int n);
@@ -41,13 +41,13 @@ int main(int argc, char** argv)
 
 	do
 	{
-		printf("1 - Search a term in the document\n2 - Exit ");
+		printf("1 - Search a term in the document\n2 - change a value in the document.\n3 - copy a value from one place to another\n4 - Exit ");
 		scanf("%d", &choice);
 		getchar();
 		while (choice > EXIT || choice < 1)
 		{
 			printf("Try again");
-			printf("1 - Search a term in the document\n2 - Exit ");
+			printf("1 - Search a term in the document\n2 - change a value in the document.\n3 - copy a value from one place to another\n4 - Exit ");
 			scanf("%d", &choice);
 			getchar();
 		}
