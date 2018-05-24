@@ -148,10 +148,6 @@ int isFileInfected(char* virusSignature, char* file, int sigLength, int fileLeng
 	int i = 0, j = 0;;
 	int matches = 0;
 	int exit = FALSE;
-	for (i = 0; i < fileLength; i++)
-	{
-		printf("%X ", file[i] & 0XFF);
-	}
 	for (i = 0; i < fileLength - (sigLength - 1); ++i)
 		if (file[i] == virusSignature[0]) // if the element matches the first element in the signature
 		{
