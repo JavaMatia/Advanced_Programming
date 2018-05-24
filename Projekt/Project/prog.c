@@ -19,7 +19,7 @@
 char* readBinaryData(FILE* signature, char* signatureArr, int length);
 int isFileInfected(char* virusSignature, char* file, int sigLength, int fileLength);
 int getFileLength(FILE* file);
-char* createLog(char* folderPath, FILE* log, char* virusPath, int choice);
+FILE* createLog(char* folderPath, FILE* log, char* virusPath, int choice);
 
 int main(int argc, char** argv)
 {
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 	printf("\nScanning began...\nThis process may take several minutes...\n\nScanning:\n");
 
 	//prepare log:
-	logPath = createLog(folderPath, log, signaturePath, choice);
+	log = createLog(folderPath, log, signaturePath, choice);
 
 	sigLength = getFileLength(signature); // file length
 	virusSignature = readBinaryData(signature, virusSignature, sigLength); // the virus signature is now inside array
@@ -85,7 +85,6 @@ int main(int argc, char** argv)
 				//>>>>>FROM HERE SECTION B HAS TO CHANGE SOME STUFF
 				//read the contend of the file:
 				FILE* fileToCheck = fopen(exPath, "rb");
-				FILE* logFile = fopen(logPath, "a+");
 				if (fileToCheck == NULL)
 				{
 					printf("Couldn't open %s. Skipping (Could be a directory or something)\n", exPath);
@@ -98,16 +97,16 @@ int main(int argc, char** argv)
 					if (isFileInfected(virusSignature, fileCheck, sigLength, fileLength))
 					{
 						printf("%s - Infected!\n", exPath);
-						fprintf(logFile, "%s   Infected!\n", exPath);
+						fprintf(log, "%s   Infected!\n", exPath);
 					}
 					else
 					{
 						printf("%s - Clean\n", exPath);
-						fprintf(logFile, "%s   Clean\n", exPath);
+						fprintf(log, "%s   Clean\n", exPath);
 					}
 					fclose(fileToCheck);
 				}
-				fclose(logFile);
+				
 			}
 
 			counter++; //the first two "files" are just .. so we are skipping
@@ -120,7 +119,9 @@ int main(int argc, char** argv)
 	printf("Scan complete");
 
 
+
 	getchar();
+	fclose(log);
 	free(exPath);
 	free(virusSignature);
 	free(fileCheck);
@@ -182,9 +183,9 @@ int getFileLength(FILE* file)
 /*
 The function creates a basic log with the neccessery infromation
 Input: The folder, path. the virus path the the choice chosen
-Retrun: the log path
+Retrun: the log file
 */
-char* createLog(char* folderPath, FILE* log, char* virusPath, int choice)
+FILE* createLog(char* folderPath, FILE* log, char* virusPath, int choice)
 {
 	char* exPath;
 	exPath = (char*)malloc(strlen(folderPath) + 2 + strlen("AntiVirusLog.txt")); // +2 for the 0 and for the //
@@ -209,6 +210,5 @@ char* createLog(char* folderPath, FILE* log, char* virusPath, int choice)
 
 
 	free(exPath);
-	fclose(log);
-	return exPath;
+	return log;
 }
