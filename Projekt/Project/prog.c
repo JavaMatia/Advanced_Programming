@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 				printf("Couldn't open %s. Skipping (Could be a directory or something)\n", exPath);
 				skip = TRUE;
 			}
-			if (!skip) //if the file could be openned
+			if (!skip && (strcmp(pDirent->d_name, "AntiVirusLog.txt")) && (strcmp(pDirent->d_name, ".")) && (strcmp(pDirent->d_name, ".."))) //if the file could be openned
 			{
 				fileLength = getFileLength(fileToCheck);
 				fileCheck = readBinaryData(fileToCheck, fileCheck, fileLength); // read its contents
@@ -161,12 +161,13 @@ int main(int argc, char** argv)
 	printf("See log path for results: %s\\AntiVirusLog.txt", folderPath);
 
 
-	getchar();
 	fclose(log); // close the log file
 	free(tempArray); // close the tempArray (where the last or first 20 percent of the file data was stored)
 	free(exPath); // free the path for the files
 	free(virusSignature); // free the virus signature data array
 	free(fileCheck); // 
+	getchar();
+
 	return 0;
 }
 /*
