@@ -23,10 +23,16 @@ int getFileLength(FILE* file);
 FILE* createLog(char* folderPath, FILE* log, char* virusPath, int choice);
 char* getPercent(char* file, int length, int mode, char* tempArray, int* globalLength);
 
+
 int main(int argc, char** argv)
 {
+<<<<<<< Updated upstream
 	struct dirent *pDirent;
 	FILE* log = 0;
+=======
+	char path[] = "C:\\Users\\magshimim\\OneDrive\\Documents\\Magshimim\\C2\\C\\Project\\Files\\Project_Files\\KittenVirusSign";
+	char picPath[] = "C:\\Users\\magshimim\\OneDrive\\Documents\\Magshimim\\C2\\C\\Project\\Files\\Project_Files\\kitten_frog.jpg";
+>>>>>>> Stashed changes
 	char* virusSignature = 0;
 	char* fileCheck = 0;
 	int sigLength = 0;
