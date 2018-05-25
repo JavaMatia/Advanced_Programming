@@ -17,6 +17,7 @@
 #include <dirent.h>
 
 char* readBinaryData(FILE* signature, char* signatureArr, int length);
+char* sort(DIR* dir, dirent* pDirent, char* filesArray);
 int isFileInfected(char* virusSignature, char* file, int sigLength, int fileLength);
 int getFileLength(FILE* file);
 FILE* createLog(char* folderPath, FILE* log, char* virusPath, int choice);
@@ -32,9 +33,9 @@ int main(int argc, char** argv)
 	int fileLength = 0;
 	int skip = FALSE;
 	char* exPath = 0;
-	int counter = 0;
 	int choice = 0;
 	char* logPath = 0;
+	char* filesArray = 0;
 	char* tempArray = 0;
 	int state = 0;
 	int tempArrayLength = 0;
@@ -72,11 +73,12 @@ int main(int argc, char** argv)
 
 	sigLength = getFileLength(signature); // file length
 	virusSignature = readBinaryData(signature, virusSignature, sigLength); // the virus signature is now inside array
-
+	// dont't show the dots
+	readdir(pDir);
+	readdir(pDir);
+	filesArray = sort(pDir, pDirent, filesArray);
 	while ((pDirent = readdir(pDir)) != NULL) //read from the directory until we don't get a null
 	{
-		if (counter >= 2)
-		{
 			skip = FALSE;
 			exPath = (char*)malloc(strlen(folderPath) + strlen(pDirent->d_name) + 2); // +2 for the 0 and for the //
 			strcpy(exPath, folderPath);
@@ -90,7 +92,7 @@ int main(int argc, char** argv)
 				printf("Couldn't open %s. Skipping (Could be a directory or something)\n", exPath);
 				skip = TRUE;
 			}
-			if (!skip && (strcmp(pDirent->d_name, "AntiVirusLog.txt")) && (strcmp(pDirent->d_name, ".")) && (strcmp(pDirent->d_name, ".."))) //if the file could be openned
+			if (!skip && (strcmp(pDirent->d_name, "AntiVirusLog.txt"))) //if the file could be openned
 			{
 				fileLength = getFileLength(fileToCheck);
 				fileCheck = readBinaryData(fileToCheck, fileCheck, fileLength); // read its contents
@@ -154,14 +156,12 @@ int main(int argc, char** argv)
 
 		}
 
-		counter++; //the first two "files" are just .. so we are skipping
-	}
-
 	printf("Scan complete\n");
 	printf("See log path for results: %s\\AntiVirusLog.txt", folderPath);
 
 
 	fclose(log); // close the log file
+	free(filesArray);
 	free(tempArray); // close the tempArray (where the last or first 20 percent of the file data was stored)
 	free(exPath); // free the path for the files
 	free(virusSignature); // free the virus signature data array
@@ -284,4 +284,16 @@ char* getPercent(char* file, int length, int mode, char* tempArray, int* globalL
 	}
 	*globalLength = newLength;
 	return tempArray;
+}
+char* sort(DIR* dir, dirent* pDirent, char* filesArray)
+{
+	int i = 0;
+	while ((pDirent = readdir(dir)) != NULL)
+	{
+		filesArray = (char*)realloc(filesArray, len(pDirent->d_name));
+		filesArray[i] = pDirent->d_name;
+		printf("%s\n", filesArray[i]);
+		i++;
+	}
+	return filesArray;
 }
