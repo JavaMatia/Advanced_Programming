@@ -110,6 +110,7 @@ int main(int argc, char** argv)
 				}
 				else // if the user chose quick scan: 
 				{
+					state = 0;
 					tempArray = getPercent(fileCheck, fileLength, state, tempArray, &tempArrayLength); // recieve the first 20 percent of the array
 					if (isFileInfected(virusSignature, tempArray, sigLength, tempArrayLength)) // if the virus was found in the first 20 percent, infrom the user and write it to the log
 					{
@@ -263,7 +264,7 @@ char* getPercent(char* file, int length, int mode, char* tempArray, int* globalL
 	int newLength = 0;
 	int counter = 0;
 	newLength = (int)(0.2 * length);
-	tempArray = (char*)malloc(sizeof(char)*newLength);
+	tempArray = (char*)realloc(tempArray, sizeof(char)*newLength);
 	// if mode is 0 - we need to return the first 20 percent of the array
 	if (!mode)
 	{
