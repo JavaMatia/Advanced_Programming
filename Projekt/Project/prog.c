@@ -84,13 +84,14 @@ int main(int argc, char** argv)
 		strcat(exPath, filesArray[i]);
 		//exPath - now has the path to the first file 
 		//read the contend of the file:
+
 		FILE* fileToCheck = fopen(exPath, "rb");
 		if (fileToCheck == NULL)
 		{
 			printf("Couldn't open %s. Skipping (Could be a directory or something)\n", exPath);
 			skip = TRUE;
 		}
-		if (!skip && (strcmp(filesArray[i], "AntiVirusLog.txt"))) //if the file could be openned
+		if (!skip) //if the file could be openned
 		{
 			fileLength = getFileLength(fileToCheck);
 			fileCheck = readBinaryData(fileToCheck, fileCheck, fileLength); // read its contents
@@ -106,7 +107,7 @@ int main(int argc, char** argv)
 					printf("%s - Clean\n", exPath);
 					fprintf(log, "%s   Clean\n", exPath);
 				}
-
+				free(exPath);
 			}
 			else // if the user chose quick scan: 
 			{
@@ -148,6 +149,8 @@ int main(int argc, char** argv)
 
 				}
 				ok = FALSE;
+				free(exPath);
+				free(tempArray); // close the tempArray (where the last or first 20 percent of the file data was stored)
 			}
 			fclose(fileToCheck); // close the file that was scanned
 		}
@@ -157,11 +160,13 @@ int main(int argc, char** argv)
 	printf("Scan complete\n");
 	printf("See log path for results: %s\\AntiVirusLog.txt", folderPath);
 
-
+	for (i = 0; i < length; i++)
+	{
+		free(filesArray[i]);
+	}
+	free(filesArray);
 	fclose(log); // close the log file
 	free(filesArray);
-	free(tempArray); // close the tempArray (where the last or first 20 percent of the file data was stored)
-	free(exPath); // free the path for the files
 	free(virusSignature); // free the virus signature data array
 	free(fileCheck); // 
 	getchar();
@@ -283,9 +288,13 @@ char* getPercent(char* file, int length, int mode, char* tempArray, int* globalL
 	*globalLength = newLength;
 	return tempArray;
 }
+/*
+This function returns an array with the names of the files in the folder in alphabetical order
+*/
 char** sort(DIR* dir, char** filesArray, int* length)
 {
-	int i = 0;
+	int i = 0, j = 0;
+	char* temp = 0;
 	struct dirent *pDirent;
 	int numOfFiles = 0;
 
@@ -293,25 +302,58 @@ char** sort(DIR* dir, char** filesArray, int* length)
 
 	while ((pDirent = readdir(dir)) != NULL)
 	{
-		numOfFiles++;
-
-	}
-	filesArray = (char**)malloc(sizeof(char*)*numOfFiles);
-	rewinddir(dir);
-	//readdir(dir);
-	//readdir(dir);
-	pDirent = readdir(dir);
-	for(i=0; i<numOfFiles; i++)
-	{
-		filesArray[i] = (char*)malloc(strlen(pDirent->d_name)*sizeof(char)+1);
-		filesArray[i][strlen(pDirent->d_name) * sizeof(char)] = 0;
-		strncpy(filesArray[i], pDirent->d_name, strlen(pDirent->d_name));
-		if (i != numOfFiles)
+		if (!strcmp(pDirent->d_name, ".") || !strcmp(pDirent->d_name, "..") || !strcmp(pDirent->d_name, "AntiVirusLog.txt")) //ignore log and parent directory
 		{
-			pDirent = readdir(dir);
+			//ignore
+		}
+		else
+		{
+			numOfFiles++;
 
 		}
+
 	}
-	*length = i;
+	rewinddir(dir);
+	filesArray = (char**)malloc(sizeof(char*)*numOfFiles);
+	while ((pDirent = readdir(dir)) != NULL)
+	{
+		if (!strcmp(pDirent->d_name, ".") || !strcmp(pDirent->d_name, "..") || !strcmp(pDirent->d_name, "AntiVirusLog.txt"))
+		{
+			//ignore
+		}
+		else
+		{
+			filesArray[i] = (char*)malloc(strlen(pDirent->d_name) * sizeof(char) + 1);
+			filesArray[i][strlen(pDirent->d_name)] = 0;
+			strncpy(filesArray[i], pDirent->d_name, strlen(pDirent->d_name));
+			i++;
+		}
+
+	}
+	for (i = 0; i < numOfFiles; ++i)
+	{
+
+		for (j = i + 1; j < numOfFiles; ++j)
+		{
+
+			if (strcmp(filesArray[i], filesArray[j]) > 0)
+			{
+				temp = (char*)malloc(strlen(filesArray[i]) + 1);
+				temp = filesArray[i];
+				filesArray[i] = filesArray[j];
+				filesArray[j] = temp;
+
+			}
+
+		}
+
+	}
+
+	*length = numOfFiles;
+	//free(temp); // this line is problematic
+	for (i = 0; i < numOfFiles; i++)
+	{
+		printf("%s\n", filesArray[i]);
+	}
 	return filesArray;
 }
