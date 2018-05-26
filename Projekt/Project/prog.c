@@ -1,4 +1,4 @@
-/*********************************
+﻿/*********************************
 * Class: MAGSHIMIM C2			 *
 * Week:                			 *
 * Name:                          *
@@ -10,6 +10,7 @@
 #define FALSE 0
 #define TRUE !FALSE
 #define LENGTH 50
+#define MAX_FILE_LENGTH 260 // MAX FILE LENGTH IN WINDOWS
 
 #include <stdio.h>
 #include <string.h>
@@ -46,7 +47,7 @@ int main(int argc, char** argv)
 		printf("Invalid execution!\nUsage: antivirus.exe <directory_to_search> <VirusSignature>");
 		getchar();
 		return 1;
-	}
+	} 
 	//check if the folder or file can be opened:
 	//make it easier to read:
 	char* folderPath = argv[1];
@@ -107,7 +108,6 @@ int main(int argc, char** argv)
 					printf("%s - Clean\n", exPath);
 					fprintf(log, "%s   Clean\n", exPath);
 				}
-				free(exPath);
 			}
 			else // if the user chose quick scan: 
 			{
@@ -123,6 +123,7 @@ int main(int argc, char** argv)
 				if (!ok) // if the virus wasn't found, search in the last 20 percnet
 				{
 					state = 1;
+					free(tempArray);
 					tempArray = getPercent(fileCheck, fileLength, state, tempArray, &tempArrayLength); // recieve the last 20 percent of the array
 					if (isFileInfected(virusSignature, tempArray, sigLength, tempArrayLength))
 					{
@@ -149,26 +150,23 @@ int main(int argc, char** argv)
 
 				}
 				ok = FALSE;
-				free(exPath);
 				free(tempArray); // close the tempArray (where the last or first 20 percent of the file data was stored)
 			}
-			fclose(fileToCheck); // close the file that was scanned
+			free(fileCheck);
 		}
-
+		free(filesArray[i]);
+		free(exPath);
+		fclose(fileToCheck); // close the file that was scanned
 	}
-
+	//put here the code with my comments. or read it atleast/
 	printf("Scan complete\n");
 	printf("See log path for results: %s\\AntiVirusLog.txt", folderPath);
 
-	for (i = 0; i < length; i++)
-	{
-		free(filesArray[i]);
-	}
 	free(filesArray);
+	fclose(signature);
+	closedir(pDir);
 	fclose(log); // close the log file
-	free(filesArray);
 	free(virusSignature); // free the virus signature data array
-	free(fileCheck); // 
 	getchar();
 
 	return 0;
@@ -195,12 +193,12 @@ int isFileInfected(char* virusSignature, char* file, int sigLength, int fileLeng
 	int i = 0, j = 0;;
 	int matches = 0;
 	int exit = FALSE;
-	for (i = 0; i < fileLength - (sigLength - 1); ++i)
+	for (i = 0; i < fileLength - (sigLength - 1); i++)
 		if (file[i] == virusSignature[0]) // if the element matches the first element in the signature
 		{
 			matches = TRUE;
 			exit = FALSE;
-			for (j = 1; j < sigLength && !exit; ++j)
+			for (j = 1; j < sigLength && !exit; j++)
 			{
 				if (file[i + j] != virusSignature[j])
 				{
@@ -268,7 +266,7 @@ char* getPercent(char* file, int length, int mode, char* tempArray, int* globalL
 	int newLength = 0;
 	int counter = 0;
 	newLength = (int)(0.2 * length);
-	tempArray = (char*)realloc(tempArray, sizeof(char)*newLength);
+	tempArray = (char*)malloc(sizeof(char)*newLength);
 	// if mode is 0 - we need to return the first 20 percent of the array
 	if (!mode)
 	{
@@ -294,7 +292,7 @@ This function returns an array with the names of the files in the folder in alph
 char** sort(DIR* dir, char** filesArray, int* length)
 {
 	int i = 0, j = 0;
-	char* temp = 0;
+	char* tempArray = 0;
 	struct dirent *pDirent;
 	int numOfFiles = 0;
 
@@ -330,30 +328,21 @@ char** sort(DIR* dir, char** filesArray, int* length)
 		}
 
 	}
-	for (i = 0; i < numOfFiles; ++i)
+	for (i = 0; i < numOfFiles; i++)
 	{
 
-		for (j = i + 1; j < numOfFiles; ++j)
+		for (j = i + 1; j < numOfFiles; j++)
 		{
 
 			if (strcmp(filesArray[i], filesArray[j]) > 0)
 			{
-				temp = (char*)malloc(strlen(filesArray[i]) + 1);
-				temp = filesArray[i];
+				tempArray = filesArray[i]; 
 				filesArray[i] = filesArray[j];
-				filesArray[j] = temp;
+				filesArray[j] = tempArray;
 
 			}
-
 		}
-
 	}
-
 	*length = numOfFiles;
-	//free(temp); // this line is problematic
-	for (i = 0; i < numOfFiles; i++)
-	{
-		printf("%s\n", filesArray[i]);
-	}
 	return filesArray;
 }
