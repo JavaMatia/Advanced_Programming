@@ -153,10 +153,11 @@ int main(int argc, char** argv)
 				free(tempArray); // close the tempArray (where the last or first 20 percent of the file data was stored)
 			}
 			free(fileCheck);
+			free(filesArray[i]);
+			fclose(fileToCheck); // close the file that was scanned
 		}
-		free(filesArray[i]);
 		free(exPath);
-		fclose(fileToCheck); // close the file that was scanned
+
 	}
 	//put here the code with my comments. or read it atleast/
 	printf("Scan complete\n");
