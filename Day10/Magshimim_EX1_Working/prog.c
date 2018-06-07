@@ -10,7 +10,7 @@
 
 #define SIZE 20
 
-personNode* createPersonNode(char name[SIZE], int age);
+personNode* createPersonNode(char name[], int age);
 void insertNode(personNode** head, personNode* node);
 void deleteList(personNode** head);
 void myFgets(char str[], int n);
@@ -50,7 +50,7 @@ The function creates new person node.
 Input: name of the person and his age
 Output: the new person struct
 */
-personNode* createPersonNode(char name[SIZE], int age)
+personNode* createPersonNode(char name[], int age)
 {
 	personNode* newPerson = (personNode*)malloc(sizeof(personNode));
 	newPerson->age = age;

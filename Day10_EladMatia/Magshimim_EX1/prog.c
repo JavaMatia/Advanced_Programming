@@ -7,19 +7,21 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define SIZE 20
+
+typedef struct personNode {
+	char name[SIZE];
+	int age; 
+	struct personNode* next;
+}personNode;
 
 personNode* createPersonNode(char name[SIZE], int age);
 void insertNode(personNode** head, personNode* node);
 void deleteList(personNode** head);
 void myFgets(char str[], int n);
 
-typedef struct personNode {
-	char name[SIZE];
-	int age; 
-	personNode* next;
-}personNode;
 
 int main(void)
 {
@@ -31,17 +33,20 @@ int main(void)
 
 	printf("How many people are you?");
 	scanf("%d", &numOfPeople);
+	getchar();
 
 	for (i = 0; i < numOfPeople; i++)
 	{
 		personNode* newPerson = NULL;
-		printf("What is the name of person %d?", i+1);
+		printf("What is the name of person %d? ", i+1);
 		myFgets(name, SIZE);
-		printf("What is the age of person %d?", i+1);
+		printf("What is the age of person %d? ", i+1);
+		scanf("%d", &age);
+		getchar();
 		newPerson = createPersonNode(name, age);
 		insertNode(&listHead, newPerson);
 	}
-	deleteList(listHead);
+	deleteList(&listHead);
 	getchar();
 	return 0;
 }
