@@ -23,7 +23,7 @@ void insertNode(personNode** head, personNode* node);
 void deleteList(personNode** head);
 void myFgets(char str[], int n);
 int listLength(personNode** head);
-
+personNode* copyList(personNode** head);
 
 int main(void)
 {
@@ -49,8 +49,11 @@ int main(void)
 		insertNode(&listHead, newPerson);
 	}
 	printList(&listHead);
-	printf("List length: %d", listLength(&listHead));
+	printf("List length: %d\n", listLength(&listHead));
+	personNode* copy = copyList(&listHead);
+	printList(&copy);
 	deleteList(&listHead);
+	deleteList(&copy);
 	getchar();
 	return 0;
 }
@@ -144,4 +147,21 @@ int listLength(personNode** head)
 		length = 1 + listLength(&(curr->next));
 	}
 	return length;
+}
+/*
+The function creates a new copy of a given list
+Input: the head of list you wish to copy
+Output: a pointer to the head of the new copy
+*/
+personNode* copyList(personNode** head)
+{
+	personNode* curr = *head;
+	personNode* newList = NULL;
+	while (curr)
+	{
+		personNode* newPersonCopy = createPersonNode(curr->name, curr->age);
+		insertNode(&newList, newPersonCopy);
+		curr = curr->next;
+	}
+	return newList;
 }
