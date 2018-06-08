@@ -18,9 +18,11 @@ typedef struct personNode {
 }personNode;
 
 personNode* createPersonNode(char name[SIZE], int age);
+void printList(personNode** head);
 void insertNode(personNode** head, personNode* node);
 void deleteList(personNode** head);
 void myFgets(char str[], int n);
+int listLength(personNode** head);
 
 
 int main(void)
@@ -31,21 +33,23 @@ int main(void)
 	char name[SIZE] = { 0 };
 	personNode* listHead = NULL; // always the head of the list. has to keep it updated
 
-	printf("How many people are you?");
+	printf("How many people are you? ");
 	scanf("%d", &numOfPeople);
 	getchar();
 
 	for (i = 0; i < numOfPeople; i++)
 	{
 		personNode* newPerson = NULL;
-		printf("What is the name of person %d? ", i+1);
+		printf("Enter name: ");
 		myFgets(name, SIZE);
-		printf("What is the age of person %d? ", i+1);
+		printf("Enter age: ");
 		scanf("%d", &age);
 		getchar();
 		newPerson = createPersonNode(name, age);
 		insertNode(&listHead, newPerson);
 	}
+	printList(&listHead);
+	printf("List length: %d", listLength(&listHead));
 	deleteList(&listHead);
 	getchar();
 	return 0;
@@ -107,4 +111,37 @@ void deleteList(personNode** head)
 		free(temp);
 	}
 	*head = NULL;
+}
+/*
+The function prints a given list
+Input: the list head
+Output: prints the list
+*/
+void printList(personNode** head)
+{
+	personNode* curr = *head;
+	while (curr)
+	{
+		printf("Name: %s, Age: %d\n", curr->name, curr->age);
+		curr = curr->next;
+	}
+}
+/*
+The function returns the length of given list.
+Input: the list head
+Output: the list length
+*/
+int listLength(personNode** head)
+{
+	int length = 0;
+	personNode* curr = *head;
+	if (!curr)
+	{
+		length = 0;
+	}
+	else
+	{
+		length = 1 + listLength(&(curr->next));
+	}
+	return length;
 }
