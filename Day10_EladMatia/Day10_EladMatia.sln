@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Magshimim_EX1", "Magshimim_EX1\Magshimim_EX1.vcxproj", "{A496E4FB-4C58-47F1-93DC-89545A80E201}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Magshimim_EX2", "Magshimim_EX2\Magshimim_EX2.vcxproj", "{1FCC87C4-5236-40D8-A1C8-56969F423D54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{A496E4FB-4C58-47F1-93DC-89545A80E201}.Release|x64.Build.0 = Release|x64
 		{A496E4FB-4C58-47F1-93DC-89545A80E201}.Release|x86.ActiveCfg = Release|Win32
 		{A496E4FB-4C58-47F1-93DC-89545A80E201}.Release|x86.Build.0 = Release|Win32
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Debug|x64.ActiveCfg = Debug|x64
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Debug|x64.Build.0 = Debug|x64
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Debug|x86.ActiveCfg = Debug|Win32
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Debug|x86.Build.0 = Debug|Win32
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Release|x64.ActiveCfg = Release|x64
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Release|x64.Build.0 = Release|x64
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Release|x86.ActiveCfg = Release|Win32
+		{1FCC87C4-5236-40D8-A1C8-56969F423D54}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
