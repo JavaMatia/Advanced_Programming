@@ -23,7 +23,7 @@ Frame* createFrame(FrameNode** head)
 	char path[PATH_SIZE] = { 0 };
 	int duration = 0;
 	
-	printf("Enter file path: ");
+	printf("Enter frame path: ");
 	myFgets(path, PATH_SIZE);
 	//file check 
 	check = fopen(path, "r");
@@ -39,7 +39,7 @@ Frame* createFrame(FrameNode** head)
 		fclose(check);
 	}
 
-	printf("Enter duration in milliseconds: ");
+	printf("Enter frame duration in milliseconds: ");
 	scanf("%d", &duration);
 	getchar();
 
