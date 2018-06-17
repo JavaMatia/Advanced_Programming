@@ -49,9 +49,12 @@ void menu(void)
 			printf("***Creating new frame***\n");
 			createFrameNode(&firstFrame);
 			printf("Frame added successfully!\n\n");
+			printList(&firstFrame);
+			play(firstFrame);
 			break;
 		case 2:
 			removeFrame(&firstFrame);
+
 		default:
 			break;
 		}

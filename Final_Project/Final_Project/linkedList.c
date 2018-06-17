@@ -22,7 +22,7 @@ Frame* createFrame(FrameNode** head)
 	char fName[STR_SIZE] = { 0 };
 	char path[PATH_SIZE] = { 0 };
 	int duration = 0;
-	
+
 	printf("Enter frame path: ");
 	myFgets(path, PATH_SIZE);
 	//file check 
@@ -56,11 +56,11 @@ Frame* createFrame(FrameNode** head)
 		}
 		curr = curr->next;
 	}
-	
-	
+
+
 	newFrame->name = (char*)malloc(sizeof(char)*STR_SIZE);
 	newFrame->path = (char*)malloc(sizeof(char)*PATH_SIZE);
-	strncpy(newFrame->name, fName, STR_SIZE); 	
+	strncpy(newFrame->name, fName, STR_SIZE);
 	strncpy(newFrame->path, path, PATH_SIZE);
 	newFrame->duration = duration;
 	return newFrame;
@@ -123,4 +123,53 @@ void myFgets(char str[], int n)
 {
 	fgets(str, n, stdin);
 	str[strcspn(str, "\n")] = 0;
+}
+void removeFrame(FrameNode** head)
+{
+	char name[STR_SIZE] = { 0 };
+	FrameNode* temp = NULL;
+	FrameNode* curr = *head;
+	int done = 0;
+	printf("Enter frame name to remove: ");
+	myFgets(name, STR_SIZE);
+	if (curr) // if the list is not empty
+	{
+		if (!strcmp((*head)->frame->name, name)) //check if we are deleting the first person in line
+		{
+			temp = *head;
+			*head = (*head)->next;
+			free((*head)->frame->name);
+			free((*head)->frame->path);
+			done = 1;
+		}
+		else
+		{
+			while (curr->next && !done)
+			{
+				if (!strcmp(curr->next->frame->name, name)) // we want to catch the node before the one we want to delete
+				{
+					temp = curr->next; // put aside the node to delete
+					curr->next = temp->next; // link the node before it, to the node after it
+					free(temp->frame->name); // delete the node
+					free(temp->frame->path);
+					done = 1;
+
+				}
+				else
+				{
+					curr = curr->next;
+				}
+			}
+		}
+
+	}
+	if (done)
+	{
+		printf("%s removed from line\n", name);
+	}
+	else
+	{
+		printf("%s not in line\n", name);
+	}
+
 }
