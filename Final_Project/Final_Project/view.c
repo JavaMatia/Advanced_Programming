@@ -16,7 +16,6 @@ void play(FrameNode* list)
 	cvNamedWindow("Display window", CV_WINDOW_AUTOSIZE); //create a window
 	FrameNode* head = list;
 	int imgNum = 1, playCount = 0;
-	printf(list->frame->path);
 	IplImage* image;
 	while (playCount < GIF_REPEAT)
 	{

@@ -41,6 +41,9 @@ void menu(void)
 		printf("What would you like to do?\n");
 		printf("  [0] Exit \n");
 		printf("  [1] Add new frame \n");
+		printf("  [2] Remove frame \n");
+		printf("  [6] List frames \n");
+		printf("  [7] Play GIF! \n");
 		scanf("%d", &choice);
 		getchar();
 		switch (choice)
@@ -49,12 +52,17 @@ void menu(void)
 			printf("***Creating new frame***\n");
 			createFrameNode(&firstFrame);
 			printf("Frame added successfully!\n\n");
-			printList(&firstFrame);
-			play(firstFrame);
 			break;
 		case 2:
+			printf("***Removing frame***\n");
 			removeFrame(&firstFrame);
-
+			break;
+		case 6:
+			printList(&firstFrame);
+			break;
+		case 7:
+			play(firstFrame);
+			break;
 		default:
 			break;
 		}

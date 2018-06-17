@@ -137,10 +137,12 @@ void removeFrame(FrameNode** head)
 		if (!strcmp((*head)->frame->name, name)) //check if we are deleting the first person in line
 		{
 			temp = *head;
+			free(temp->frame->name);
+			free(temp->frame->path);
+			free(temp);
 			*head = (*head)->next;
-			free((*head)->frame->name);
-			free((*head)->frame->path);
 			done = 1;
+			*head = NULL;
 		}
 		else
 		{
