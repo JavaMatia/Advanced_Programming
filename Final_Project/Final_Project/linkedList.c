@@ -6,6 +6,8 @@
 void myFgets(char str[], int n);
 Frame* createFrame(FrameNode** head);
 void insertNode(FrameNode** head, FrameNode* node);
+int listLength(FrameNode** head);
+
 
 
 /*
@@ -124,6 +126,11 @@ void myFgets(char str[], int n)
 	fgets(str, n, stdin);
 	str[strcspn(str, "\n")] = 0;
 }
+/*
+The function removes a frame by its name
+Input: the function head
+Output: None
+*/
 void removeFrame(FrameNode** head)
 {
 	char name[STR_SIZE] = { 0 };
@@ -151,9 +158,11 @@ void removeFrame(FrameNode** head)
 				if (!strcmp(curr->next->frame->name, name)) // we want to catch the node before the one we want to delete
 				{
 					temp = curr->next; // put aside the node to delete
-					curr->next = temp->next; // link the node before it, to the node after it
 					free(temp->frame->name); // delete the node
 					free(temp->frame->path);
+					free(temp);
+					curr->next = temp->next; // link the node before it, to the node after it
+
 					done = 1;
 
 				}
@@ -175,3 +184,80 @@ void removeFrame(FrameNode** head)
 	}
 
 }
+/*
+The function returns the length of the list
+Input: the list head
+Output: the length of the list
+*/
+int listLength(FrameNode** head)
+{
+	FrameNode* curr = *head;
+	int counter = 0;
+	while (curr)
+	{
+		counter++;
+		curr = curr->next;
+	}
+}
+
+void changeFramePosition(FrameNode** head)
+{
+	FrameNode* curr = *head;
+	FrameNode* x = NULL;
+	char frameName[STR_SIZE] = { 0 };
+	int pos = 0;
+	int i = 0;
+	int flag = FALSE;
+	printf("Enter the name of the frame you wish to move: ");
+	myFgets(frameName, STR_SIZE);
+	printf("Enter new position: ");
+	scanf("%d", &pos);
+	getchar();
+
+	//check for invalid position
+	while (pos > listLength(head) && pos < 1)
+	{
+		printf("Invalid position! Try again: ");
+		scanf("%d", &pos);
+		getchar();
+	}
+	//check for invalid name
+	while (curr)
+	{
+		if (!(curr->frame->name, frameName))
+		{
+			flag = TRUE;
+			x = curr;
+		}
+	}
+
+	curr = head;
+
+	if(!flag)
+	{ 
+		printf("Frame doesn't exist.\n");
+	}
+	else //we are good to go 
+	{
+		//for loop. condition i<pos-1. than curr will be the frame before the new frame we want to attach
+		for (i = 0; i < pos - 1; i++)
+		{
+			curr = curr->next;
+		}
+		x->next = curr->next;
+		curr->next = x;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
