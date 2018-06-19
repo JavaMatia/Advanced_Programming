@@ -27,4 +27,5 @@ void createFrameNode(FrameNode** head);
 void printList(FrameNode** head);
 void removeFrame(FrameNode** head);
 void changeFramePosition(FrameNode** head);
+void changeDuration(FrameNode** head);
 #endif

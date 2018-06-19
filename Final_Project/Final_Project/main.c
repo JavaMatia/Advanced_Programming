@@ -25,7 +25,6 @@ void menu(void)
 		scanf("%d", &choice);
 		getchar();
 	}
-
 	if (choice)
 	{
 		//loadProject();
@@ -42,6 +41,8 @@ void menu(void)
 		printf("  [0] Exit \n");
 		printf("  [1] Add new frame \n");
 		printf("  [2] Remove frame \n");
+		printf("  [3] Move frame \n");
+		printf("  [4] Change duration \n");
 		printf("  [6] List frames \n");
 		printf("  [7] Play GIF! \n");
 		scanf("%d", &choice);
@@ -56,9 +57,17 @@ void menu(void)
 		case 2:
 			printf("***Removing frame***\n");
 			removeFrame(&firstFrame);
+			printf("***Frame removed successfully!***\n");
 			break;
 		case 3:
+			printf("***Moving frame***\n");
 			changeFramePosition(&firstFrame);
+			printf("***Frame moved successfully!***\n");
+			break;
+		case 4:
+			printf("***Changing duration***\n");
+			changeDuration(&firstFrame);
+			printf("***Frame duration changed successfully!***\n");
 			break;
 		case 6:
    			printList(&firstFrame);

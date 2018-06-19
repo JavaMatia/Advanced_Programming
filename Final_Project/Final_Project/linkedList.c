@@ -176,11 +176,11 @@ void removeFrame(FrameNode** head)
 	}
 	if (done)
 	{
-		printf("%s removed from line\n", name);
+		printf("%s removed from frame list\n", name);
 	}
 	else
 	{
-		printf("%s not in line\n", name);
+		printf("%s doesn't exist\n", name);
 	}
 
 }
@@ -204,7 +204,7 @@ int listLength(FrameNode** head)
 void changeFramePosition(FrameNode** head)
 {
 	FrameNode* curr = *head;
-	FrameNode* x = NULL;
+	FrameNode* x = NULL; //the node we are moving
 	char frameName[STR_SIZE] = { 0 };
 	int pos = 0;
 	int i = 0;
@@ -245,7 +245,7 @@ void changeFramePosition(FrameNode** head)
 			{
 				x = curr->next; //this is the frame the user asked to move
 				flag = TRUE;
-				curr = x->next; //link the node before the one we wanted to move to the one after
+				curr->next = curr->next->next; //link the node before the one we wanted to move to the one after
 			}
 			else
 			{
@@ -260,19 +260,77 @@ void changeFramePosition(FrameNode** head)
 	}
 	else //the function 
 	{
-		i = 1;
-		while (curr && i != pos - 1)
+		if (pos == 1) // if the user want to move a node to the head
 		{
-			curr = curr->next;
-			i++;
+			x->next = *head; //point x (the node the user wants to move) to the head
+			*head = x; //the new head is now x.
 		}
-		printf(curr->frame->name);
-		x->next = curr->next;
-		curr->next = x;
+		else
+		{
+			i = 1;
+			while (curr && i != pos - 1)
+			{
+				curr = curr->next;
+				i++;
+			}
+			x->next = curr->next;
+			curr->next = x;
+		}
+
 	}
+
 }
 
+/*
+The function changes the duration of a specified frame
+Input: list head
+Output: none
+*/
+void changeDuration(FrameNode** head)
+{
+	FrameNode* curr = *head;
+	FrameNode* x = NULL;
+	char fName[STR_SIZE] = { 0 };
+	int found = FALSE;
+	int newDuration = 0;
 
+	printf("Which frame do you want to change? ");
+	myFgets(fName, STR_SIZE);
+
+	while (curr && !found)
+	{
+		if (!strcmp(curr->frame->name, fName))
+		{
+			found = TRUE;
+			x = curr;
+		}
+		curr = curr->next;
+	}
+	while (!found) //check if existing frame
+	{
+		curr = *head;
+		printf("Frame doesn't exist. Please try again: ");
+		myFgets(fName, STR_SIZE);
+
+		while (curr && !found)
+		{
+			if (!strcmp(curr->frame->name, fName))
+			{
+				found = TRUE;
+				x = curr;
+			}
+			else
+			{
+				curr = curr->next;
+			}
+
+		}
+	}
+	printf("Please enter the new duration for the specified frame: ");
+	scanf("%d", &newDuration);
+	getchar();
+	x->frame->duration = newDuration;
+}
 
 
 
