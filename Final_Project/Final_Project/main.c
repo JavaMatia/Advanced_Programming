@@ -57,12 +57,16 @@ void menu(void)
 			printf("***Removing frame***\n");
 			removeFrame(&firstFrame);
 			break;
+		case 3:
+			changeFramePosition(&firstFrame);
+			break;
 		case 6:
-			printList(&firstFrame);
+   			printList(&firstFrame);
 			break;
 		case 7:
 			play(firstFrame);
 			break;
+
 		default:
 			break;
 		}

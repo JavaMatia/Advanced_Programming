@@ -198,6 +198,7 @@ int listLength(FrameNode** head)
 		counter++;
 		curr = curr->next;
 	}
+	return counter;
 }
 
 void changeFramePosition(FrameNode** head)
@@ -214,6 +215,13 @@ void changeFramePosition(FrameNode** head)
 	scanf("%d", &pos);
 	getchar();
 
+
+	if (!curr)
+	{
+		//head is null, nothing to move
+		printf("List is empty, nothing to move.");
+	}
+
 	//check for invalid position
 	while (pos > listLength(head) && pos < 1)
 	{
@@ -221,34 +229,48 @@ void changeFramePosition(FrameNode** head)
 		scanf("%d", &pos);
 		getchar();
 	}
-	//check for invalid name
-	while (curr)
+
+
+	if (!strcmp((*head)->frame->name, frameName)) //check if we are moving the first element in the list
 	{
-		if (!(curr->frame->name, frameName))
+		flag = TRUE;
+		x = *head;
+		*head = (*head)->next;
+	}
+	else
+	{
+		while (curr->next && !flag) //grab the frame we want to move
 		{
-			flag = TRUE;
-			x = curr;
+			if (!strcmp(curr->next->frame->name, frameName))
+			{
+				x = curr->next; //this is the frame the user asked to move
+				flag = TRUE;
+				curr = x->next; //link the node before the one we wanted to move to the one after
+			}
+			else
+			{
+				curr = curr->next;
+			}
 		}
 	}
-
-	curr = head;
-
-	if(!flag)
-	{ 
+	curr = *head;
+	if (!flag)
+	{
 		printf("Frame doesn't exist.\n");
 	}
-	else //we are good to go 
+	else //the function 
 	{
-		//for loop. condition i<pos-1. than curr will be the frame before the new frame we want to attach
-		for (i = 0; i < pos - 1; i++)
+		i = 1;
+		while (curr && i != pos - 1)
 		{
 			curr = curr->next;
+			i++;
 		}
+		printf(curr->frame->name);
 		x->next = curr->next;
 		curr->next = x;
 	}
 }
-
 
 
 
