@@ -10,7 +10,7 @@ void menu(void);
 int main(void)
 {
 	menu();
-	//cleanMemory(&firstFrame);
+	cleanMemory(&firstFrame);
 	printf("Bye!");
 	getchar();
 	return 0;
