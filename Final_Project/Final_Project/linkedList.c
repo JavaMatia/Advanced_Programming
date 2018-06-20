@@ -292,7 +292,7 @@ void changeDuration(FrameNode** head)
 	FrameNode* x = NULL;
 	char fName[STR_SIZE] = { 0 };
 	int found = FALSE;
-	int newDuration = 0;
+	int newDuration = 1;
 
 	printf("Which frame do you want to change? ");
 	myFgets(fName, STR_SIZE);
@@ -329,9 +329,58 @@ void changeDuration(FrameNode** head)
 	printf("Please enter the new duration for the specified frame: ");
 	scanf("%d", &newDuration);
 	getchar();
+
+	while (newDuration <= 0)
+	{
+		printf("Enter a positive duration: \n");
+		scanf("%d", &newDuration);
+		getchar();
+	}
 	x->frame->duration = newDuration;
 }
-
+/*
+The function changes all the frames' duration to new specified duration
+Input: the head of the list
+Output: none
+*/
+void changeAllDurations(FrameNode** head)
+{
+	FrameNode* curr = *head;
+	int newDuration = 0;
+	printf("Enter new duration: ");
+	scanf("%d", &newDuration);
+	getchar();
+	while (newDuration <= 0)
+	{
+		printf("Enter a positive duration: \n");
+		scanf("%d", &newDuration);
+		getchar();
+	}
+	while (curr)
+	{
+		curr->frame->duration = newDuration;
+	}
+}
+/*
+The function cleans everything (deletes the list)
+Input: list head
+Output: nono
+*/
+void cleanMemory(FrameNode** head)
+{
+	FrameNode* curr = *head;
+	FrameNode* temp = NULL;
+	while (curr)
+	{
+		temp = curr;
+		curr = curr->next;
+		free(temp->frame->name);
+		free(temp->frame->path);
+		free(temp->frame);
+		free(temp);
+	}
+	*head = NULL;
+}
 
 
 

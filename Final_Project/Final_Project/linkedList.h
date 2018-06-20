@@ -28,4 +28,6 @@ void printList(FrameNode** head);
 void removeFrame(FrameNode** head);
 void changeFramePosition(FrameNode** head);
 void changeDuration(FrameNode** head);
+void changeAllDurations(FrameNode** head);
+void cleanMemory(FrameNode** head);
 #endif

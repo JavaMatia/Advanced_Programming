@@ -10,6 +10,8 @@ void menu(void);
 int main(void)
 {
 	menu();
+	//cleanMemory(&firstFrame);
+	printf("Bye!");
 	getchar();
 	return 0;
 }
@@ -43,6 +45,7 @@ void menu(void)
 		printf("  [2] Remove frame \n");
 		printf("  [3] Move frame \n");
 		printf("  [4] Change duration \n");
+		printf("  [5] Change duration in all frames \n");
 		printf("  [6] List frames \n");
 		printf("  [7] Play GIF! \n");
 		scanf("%d", &choice);
@@ -69,16 +72,20 @@ void menu(void)
 			changeDuration(&firstFrame);
 			printf("***Frame duration changed successfully!***\n");
 			break;
+		case 5:
+			printf("***Changing duration for all frames\n***");
+			changeAllDurations(&firstFrame);
+			printf("***All frame duration have been changed successfully ***");
+			break;
 		case 6:
    			printList(&firstFrame);
 			break;
 		case 7:
+			printf("***Playing video***\n");
 			play(firstFrame);
 			break;
-
 		default:
 			break;
 		}
 	}
-	//TODO: free all the allocated memory
 }
