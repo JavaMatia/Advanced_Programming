@@ -30,4 +30,5 @@ void changeFramePosition(FrameNode** head);
 void changeDuration(FrameNode** head);
 void changeAllDurations(FrameNode** head);
 void cleanMemory(FrameNode** head);
+void saveProject(FrameNode** head);
 #endif

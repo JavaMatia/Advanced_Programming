@@ -48,6 +48,7 @@ void menu(void)
 		printf("  [5] Change duration in all frames \n");
 		printf("  [6] List frames \n");
 		printf("  [7] Play GIF! \n");
+		printf("  [8] Save project \n");
 		scanf("%d", &choice);
 		getchar();
 		switch (choice)
@@ -83,6 +84,9 @@ void menu(void)
 		case 7:
 			printf("***Playing video***\n");
 			play(firstFrame);
+			break;
+		case 8:
+			saveProject(&firstFrame);
 			break;
 		default:
 			break;

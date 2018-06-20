@@ -381,8 +381,63 @@ void cleanMemory(FrameNode** head)
 	}
 	*head = NULL;
 }
+/*
+The function saves the project to a file
+Input: list head
+Output: none
+*/
+void saveProject(FrameNode** head)
+{
+	FILE* saveFile = NULL;
+	FrameNode* curr = *head;
+	char path[PATH_SIZE] = { 0 };
+	printf("Where do you want to save the project? Enter the path: ");
+	myFgets(path, PATH_SIZE);
+	saveFile = fopen(path, "w");
+	if (!saveFile) //check if we are unable to create the file
+	{
+		printf("Error creating file.\n");
+	}
+	else
+	{
+		while (curr)
+		{
+			if (curr->next)
+			{
+				fprintf(saveFile, "%s %d %s|", curr->frame->path, curr->frame->duration, curr->frame->name);
+			}
+			else
+			{
+				fprintf(saveFile, "%s %d %s", curr->frame->path, curr->frame->duration, curr->frame->name);
+			}
+			curr = curr->next;
+		}
+	}
+	fclose(saveFile);
+}
+void loadProject(FrameNode** head)
+{
+	char saveFile[PATH_SIZE] = { 0 };
+	FILE* loadFrom = NULL;
+	int c = 0;
+	char path[PATH_SIZE] = { 0 };
+	char name[STR_SIZE] = { 0 };
+	char duration = 0;
 
-
+	printf("Enter the path to the save file: ");
+	myFgets(saveFile, PATH_SIZE);
+	loadFrom = fopen(loadFrom, "r");
+	while (!loadFrom)
+	{
+		printf("File couldn't be found. Enter a valid path to the file: ");
+		myFgets(saveFile, "r");
+		loadFrom = fopen(loadFrom, "r");
+	}
+	while ((c==getc(loadFrom)) != EOF)
+	{
+		
+	}
+}
 
 
 
