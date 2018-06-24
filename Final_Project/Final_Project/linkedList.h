@@ -31,4 +31,5 @@ void changeDuration(FrameNode** head);
 void changeAllDurations(FrameNode** head);
 void cleanMemory(FrameNode** head);
 void saveProject(FrameNode** head);
+void loadProject(FrameNode** head);
 #endif

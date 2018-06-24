@@ -419,23 +419,67 @@ void loadProject(FrameNode** head)
 {
 	char saveFile[PATH_SIZE] = { 0 };
 	FILE* loadFrom = NULL;
-	int c = 0;
-	char path[PATH_SIZE] = { 0 };
-	char name[STR_SIZE] = { 0 };
-	char duration = 0;
+	char* file = NULL;
+	int i = 0;
+	int j = 0;
+	char c = 0;
+	int fileLength = 0;
+
+	int numOfFrames = 0;
+	char** paths = NULL;
+	char** names = NULL;
+	int duration = 0;
 
 	printf("Enter the path to the save file: ");
 	myFgets(saveFile, PATH_SIZE);
-	loadFrom = fopen(loadFrom, "r");
+	loadFrom = fopen(saveFile, "r");
 	while (!loadFrom)
 	{
 		printf("File couldn't be found. Enter a valid path to the file: ");
-		myFgets(saveFile, "r");
-		loadFrom = fopen(loadFrom, "r");
+		myFgets(saveFile, PATH_SIZE);
+		loadFrom = fopen(saveFile, "r");
 	}
-	while ((c==getc(loadFrom)) != EOF)
+	c = (char)getc(loadFrom);
+	while (c != EOF)
 	{
+		fileLength++;
+		if (c == "|") //we need to know the number of frames in order to malloc 
+		{
+			numOfFrames++;
+		}
+		file = (char*)realloc(file, sizeof(char)*1); //if there is a char in the file, we need make space for it in the array
+		file[i] = c;
+		i++;
+		c = (char)getc(loadFrom);
+	}
+	fclose(loadFrom);
+
+	paths = (char**)malloc(sizeof(char*)*numOfFrames);
+	names = (char**)malloc(sizeof(char*)*numOfFrames);
+
+
+	for (i = 0; i < numOfFrames; i++)
+	{
+		paths[i] = (char*)malloc(sizeof(char)*PATH_SIZE);
+		names[i] = (char*)malloc(sizeof(char)*STR_SIZE);
 		
+	}
+	for (i = 0; i < fileLength; i++)
+	{
+		int j = 0;
+		if (file[i] != "|")
+		{
+			while (file[i] != " ")
+			{
+				paths[i][j] = file[i];
+				j++;
+			}
+			while (file[i] != " ")
+			{
+				paths[i][j] = file[i];
+				j++;
+			}
+		}
 	}
 }
 

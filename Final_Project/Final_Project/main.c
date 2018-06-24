@@ -9,6 +9,7 @@ FrameNode* firstFrame = NULL; //make the head of the gif global because we gonna
 void menu(void);
 int main(void)
 {
+	loadProject(&firstFrame);
 	menu();
 	cleanMemory(&firstFrame);
 	printf("Bye!");
