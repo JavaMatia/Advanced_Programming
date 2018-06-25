@@ -404,11 +404,7 @@ void saveProject(FrameNode** head)
 		{
 			if (curr->next)
 			{
-				fprintf(saveFile, "%s %d %s|", curr->frame->path, curr->frame->duration, curr->frame->name);
-			}
-			else
-			{
-				fprintf(saveFile, "%s %d %s", curr->frame->path, curr->frame->duration, curr->frame->name);
+				fprintf(saveFile, "%s %s %d|", curr->frame->path, curr->frame->name, curr->frame->duration);
 			}
 			curr = curr->next;
 		}
@@ -428,7 +424,7 @@ void loadProject(FrameNode** head)
 	int numOfFrames = 0;
 	char** paths = NULL;
 	char** names = NULL;
-	int duration = 0;
+	int* durations = 0;
 
 	printf("Enter the path to the save file: ");
 	myFgets(saveFile, PATH_SIZE);
@@ -443,7 +439,7 @@ void loadProject(FrameNode** head)
 	while (c != EOF)
 	{
 		fileLength++;
-		if (c == "|") //we need to know the number of frames in order to malloc 
+		if (c == '|') //we need to know the number of frames in order to malloc 
 		{
 			numOfFrames++;
 		}
@@ -456,7 +452,7 @@ void loadProject(FrameNode** head)
 
 	paths = (char**)malloc(sizeof(char*)*numOfFrames);
 	names = (char**)malloc(sizeof(char*)*numOfFrames);
-
+	durations = (int*)malloc(sizeof(int)*numOfFrames);
 
 	for (i = 0; i < numOfFrames; i++)
 	{
@@ -466,20 +462,26 @@ void loadProject(FrameNode** head)
 	}
 	for (i = 0; i < fileLength; i++)
 	{
-		int j = 0;
-		if (file[i] != "|")
+		if (file[i] != '|')
 		{
-			while (file[i] != " ")
+			while (file[i] != ' ')
 			{
 				paths[i][j] = file[i];
 				j++;
 			}
-			while (file[i] != " ")
+			j = 0;
+			while (file[i] != ' ')
 			{
-				paths[i][j] = file[i];
+				names[i][j] = file[i];
 				j++;
 			}
+			j = 0;
+			durations[i] = file[i];
 		}
+	}
+	for (i = 0; i < numOfFrames; i++)
+	{
+		printf("%s- %s- %d", paths[i], names[i], durations[i]);
 	}
 }
 
