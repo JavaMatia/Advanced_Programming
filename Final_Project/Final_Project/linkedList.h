@@ -5,6 +5,7 @@
 #define TRUE !FALSE
 #define STR_SIZE 25
 #define PATH_SIZE 256
+#define TEMP_NUMBER_LENGTH 100
 
 // Frame struct
 typedef struct Frame

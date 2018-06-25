@@ -4,10 +4,10 @@
 #include "linkedList.h"
 
 void myFgets(char str[], int n);
-Frame* createFrame(FrameNode** head);
+Frame* createFrame(char fName[STR_SIZE], char path[PATH_SIZE], int duration);
 void insertNode(FrameNode** head, FrameNode* node);
 int listLength(FrameNode** head);
-
+int getFileSize(FILE* file);
 
 
 /*
@@ -15,50 +15,9 @@ The function create and returns a Frame struct. It also checks if the path enter
 Input: list head to run duplicate name check
 Output: the new Frame struct (not FrameNode)
 */
-Frame* createFrame(FrameNode** head)
+Frame* createFrame(char fName[STR_SIZE], char path[PATH_SIZE], int duration)
 {
-	//variables 
 	Frame* newFrame = (Frame*)malloc(sizeof(Frame));
-	FILE* check = NULL;
-	FrameNode* curr = *head;
-	char fName[STR_SIZE] = { 0 };
-	char path[PATH_SIZE] = { 0 };
-	int duration = 0;
-
-	printf("Enter frame path: ");
-	myFgets(path, PATH_SIZE);
-	//file check 
-	check = fopen(path, "r");
-	while (!check)
-	{
-		printf("Invalid path. Try again: ");
-		myFgets(path, PATH_SIZE);
-		check = fopen(path, "r");
-
-	}
-	if (check != NULL)
-	{
-		fclose(check);
-	}
-
-	printf("Enter frame duration in milliseconds: ");
-	scanf("%d", &duration);
-	getchar();
-
-	printf("Enter frame name (25 characters MAX): ");
-	myFgets(fName, STR_SIZE);
-	//duplicate name check:
-
-	while (curr != NULL) //duplicate name check
-	{
-		while (!strcmp(curr->frame->name, fName))
-		{
-			printf("Frame name is already taken. please choose a different name: ");
-			myFgets(fName, STR_SIZE);
-		}
-		curr = curr->next;
-	}
-
 
 	newFrame->name = (char*)malloc(sizeof(char)*STR_SIZE);
 	newFrame->path = (char*)malloc(sizeof(char)*PATH_SIZE);
@@ -75,7 +34,48 @@ Output: None
 */
 void createFrameNode(FrameNode** head)
 {
-	Frame* newFrame = createFrame(head);
+	char fName[STR_SIZE] = { 0 };
+	char path[PATH_SIZE] = { 0 };
+	FILE* check = NULL;
+	FrameNode* curr = *head;
+	int duration = 0;
+
+	//get path 
+	printf("Enter frame path: ");
+	myFgets(path, PATH_SIZE);
+	//file check 
+	check = fopen(path, "r");
+	while (!check)
+	{
+		printf("Invalid path. Try again: ");
+		myFgets(path, PATH_SIZE);
+		check = fopen(path, "r");
+
+	}
+	if (check != NULL)
+	{
+		fclose(check);
+	}
+
+	//get duration
+	printf("Enter frame duration in milliseconds: ");
+	scanf("%d", &duration);
+	getchar();
+	//get name
+	printf("Enter frame name (25 characters MAX): ");
+	myFgets(fName, STR_SIZE);
+	//duplicate name check:
+
+	while (curr != NULL) //duplicate name check
+	{
+		while (!strcmp(curr->frame->name, fName))
+		{
+			printf("Frame name is already taken. please choose a different name: ");
+			myFgets(fName, STR_SIZE);
+		}
+		curr = curr->next;
+	}
+	Frame* newFrame = createFrame(fName, path, duration); //craete new -FRAME-
 	FrameNode* newFrameNode = (FrameNode*)malloc(sizeof(FrameNode));
 	newFrameNode->frame = newFrame;
 	newFrameNode->next = NULL;
@@ -359,6 +359,7 @@ void changeAllDurations(FrameNode** head)
 	while (curr)
 	{
 		curr->frame->duration = newDuration;
+		curr = curr->next;
 	}
 }
 /*
@@ -402,10 +403,7 @@ void saveProject(FrameNode** head)
 	{
 		while (curr)
 		{
-			if (curr->next)
-			{
-				fprintf(saveFile, "%s %s %d|", curr->frame->path, curr->frame->name, curr->frame->duration);
-			}
+			fprintf(saveFile, "%s %s %d| ", curr->frame->path, curr->frame->name, curr->frame->duration);
 			curr = curr->next;
 		}
 	}
@@ -418,6 +416,16 @@ void loadProject(FrameNode** head)
 	char* file = NULL;
 	int i = 0;
 	int j = 0;
+	int k = 0;
+	int tempNumber[TEMP_NUMBER_LENGTH] = {0 }; //WE CAN FILL WITH NEGATIVE NUMBER BECAUSE WE KNOW DURATION WILL NEVER BE NEGATIVE
+
+	for (i = 0; i < TEMP_NUMBER_LENGTH; i++)
+	{
+		tempNumber[i] = -1;
+	}	
+
+	int temp = 1;
+	int stage = 0;
 	char c = 0;
 	int fileLength = 0;
 
@@ -435,18 +443,18 @@ void loadProject(FrameNode** head)
 		myFgets(saveFile, PATH_SIZE);
 		loadFrom = fopen(saveFile, "r");
 	}
-	c = (char)getc(loadFrom);
-	while (c != EOF)
+
+	fileLength = getFileSize(loadFrom);
+	file = (char*)malloc(fileLength * sizeof(char));
+
+	for (i = 0; i < fileLength; i++)
 	{
-		fileLength++;
+		c = (char)getc(loadFrom);
 		if (c == '|') //we need to know the number of frames in order to malloc 
 		{
 			numOfFrames++;
 		}
-		file = (char*)realloc(file, sizeof(char)*1); //if there is a char in the file, we need make space for it in the array
 		file[i] = c;
-		i++;
-		c = (char)getc(loadFrom);
 	}
 	fclose(loadFrom);
 
@@ -456,38 +464,101 @@ void loadProject(FrameNode** head)
 
 	for (i = 0; i < numOfFrames; i++)
 	{
-		paths[i] = (char*)malloc(sizeof(char)*PATH_SIZE);
-		names[i] = (char*)malloc(sizeof(char)*STR_SIZE);
-		
+		paths[i] = (char*)malloc(sizeof(char)*PATH_SIZE); //TODO: free
+		names[i] = (char*)malloc(sizeof(char)*STR_SIZE); //TODO: free
+
 	}
 	for (i = 0; i < fileLength; i++)
 	{
-		if (file[i] != '|')
+		if (file[i] != '|') //split the frames into their arrays
 		{
-			while (file[i] != ' ')
+			if (stage == 0)
 			{
-				paths[i][j] = file[i];
-				j++;
+				if (file[i] != ' ')
+				{
+					paths[j][k] = file[i];
+					k++;
+				}
+				else
+				{
+					paths[j][k] = 0; //make it a string
+					k = 0;
+					stage = 1;
+				}
 			}
-			j = 0;
-			while (file[i] != ' ')
+			else if (stage == 1)
 			{
-				names[i][j] = file[i];
-				j++;
+				if (file[i] != ' ')
+				{
+					names[j][k] = file[i];
+					k++;
+				}
+				else
+				{
+					names[j][k] = 0; //make it a string
+					k = 0;
+					stage = 2;
+				}
 			}
-			j = 0;
-			durations[i] = file[i];
+			else
+			{
+				if (file[i] != ' ')
+				{
+					tempNumber[k] = file[i] - '0';
+					k++;
+				}
+				else
+				{
+					temp = tempNumber[0];
+					for (k = 1; tempNumber[k] != -1; k++)
+					{
+						temp *= 10;
+						temp += tempNumber[k];
+					}
+				}
+				durations[j] = temp;
+			}
+		}
+		else
+		{
+			j++;
+			k = 0;
+			stage = 0;
+			temp = 0;
+
+			for (i = 0; i < TEMP_NUMBER_LENGTH; i++)
+			{
+				tempNumber[i] = -1;
+			}
 		}
 	}
-	for (i = 0; i < numOfFrames; i++)
+	for (i = 0; i < numOfFrames; i++) //create frame node and free the unneeccessery stuff
 	{
-		printf("%s- %s- %d", paths[i], names[i], durations[i]);
+		Frame* newFrame = createFrame(names[i], paths[i], durations[i]);
+		FrameNode* newFrameNode = (FrameNode*)malloc(sizeof(FrameNode));
+		newFrameNode->frame = newFrame;
+		newFrameNode->next = NULL;
+		insertNode(head, newFrameNode);
+		free(paths[i]);
+		free(names[i]);
 	}
+	free(names);
+	free(paths);
+	free(durations);
 }
+/*
+The function returns the size of a given file
+Input: the file to check
+Output: the file size
+*/
+int getFileSize(FILE* file)
+{
+	int size = 0;
+	fseek(file, 0, SEEK_END);
+	size = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	return size;
 
-
-
-
-
+}
 
 

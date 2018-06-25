@@ -9,7 +9,6 @@ FrameNode* firstFrame = NULL; //make the head of the gif global because we gonna
 void menu(void);
 int main(void)
 {
-	loadProject(&firstFrame);
 	menu();
 	cleanMemory(&firstFrame);
 	printf("Bye!");
@@ -24,14 +23,14 @@ void menu(void)
 	while (choice > 1 || choice < 0)
 	{
 		printf("  [0] Create new project \n");
-		printf("  [1] Load existing project (coming soon) \n");
+		printf("  [1] Load existing project \n");
 		scanf("%d", &choice);
 		getchar();
 	}
 	if (choice)
 	{
-		//loadProject();
-		//in both situations we get to the same menu + add a printf telling the user that the project was successfully loaded
+		loadProject(&firstFrame);
+		printf("Project has been loaded successfully!\n\n");
 	}
 	else
 	{
@@ -77,7 +76,7 @@ void menu(void)
 		case 5:
 			printf("***Changing duration for all frames\n***");
 			changeAllDurations(&firstFrame);
-			printf("***All frame duration have been changed successfully ***");
+			printf("***All frame duration have been changed successfully\n***");
 			break;
 		case 6:
    			printList(&firstFrame);
