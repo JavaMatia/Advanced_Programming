@@ -2,7 +2,7 @@
 #include <opencv2\highgui\highgui_c.h>
 #include "linkedList.h"
 #include "view.h"
-
+#include "SaveLoad.h"
 
 FrameNode* firstFrame = NULL; //make the head of the gif global because we gonna use it in almost every function
 
@@ -61,32 +61,33 @@ void menu(void)
 		case 2:
 			printf("***Removing frame***\n");
 			removeFrame(&firstFrame);
-			printf("***Frame removed successfully!***\n");
+			printf("***Frame removed successfully!***\n\n");
 			break;
 		case 3:
 			printf("***Moving frame***\n");
 			changeFramePosition(&firstFrame);
-			printf("***Frame moved successfully!***\n");
+			printf("***Frame moved successfully!***\n\n");
 			break;
 		case 4:
 			printf("***Changing duration***\n");
 			changeDuration(&firstFrame);
-			printf("***Frame duration changed successfully!***\n");
+			printf("***Frame duration changed successfully!***\n\n");
 			break;
 		case 5:
-			printf("***Changing duration for all frames\n***");
+			printf("***Changing duration for all frames***\n");
 			changeAllDurations(&firstFrame);
-			printf("***All frame duration have been changed successfully\n***");
+			printf("***All frame duration have been changed successfully\n\n***");
 			break;
 		case 6:
    			printList(&firstFrame);
 			break;
 		case 7:
-			printf("***Playing video***\n");
+			printf("***Playing video***\n\n");
 			play(firstFrame);
 			break;
 		case 8:
 			saveProject(&firstFrame);
+			printf("***Project has been saved successfully\n\n***");
 			break;
 		default:
 			break;

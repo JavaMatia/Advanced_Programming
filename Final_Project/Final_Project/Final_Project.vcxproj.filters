@@ -24,12 +24,18 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SaveLoad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="view.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="linkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveLoad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
