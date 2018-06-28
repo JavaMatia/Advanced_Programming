@@ -5,6 +5,7 @@
 #include "SaveLoad.h"
 
 FrameNode* firstFrame = NULL; //make the head of the gif global because we gonna use it in almost every function
+FrameNode* reversed = NULL;
 
 void menu(void);
 int main(void)
@@ -48,7 +49,8 @@ void menu(void)
 		printf("  [5] Change duration in all frames \n");
 		printf("  [6] List frames \n");
 		printf("  [7] Play GIF! \n");
-		printf("  [8] Save project \n");
+		printf("  [8] Play GIF reversed \n");
+		printf("  [9] Save project \n");
 		scanf("%d", &choice);
 		getchar();
 		switch (choice)
@@ -86,6 +88,10 @@ void menu(void)
 			play(firstFrame);
 			break;
 		case 8:
+			printf("***Playing video reversed***\n\n");
+			playReversed(&firstFrame, &reversed);
+			break;
+		case 9:
 			saveProject(&firstFrame);
 			printf("***Project has been saved successfully\n\n***");
 			break;

@@ -42,4 +42,5 @@ void myFgets(char str[], int n);
 Frame* createFrame(char fName[STR_SIZE], char path[PATH_SIZE], int duration);
 void insertNode(FrameNode** head, FrameNode* node);
 int listLength(FrameNode** head);
+void playReversed(FrameNode** head, FrameNode** copyHead);
 #endif

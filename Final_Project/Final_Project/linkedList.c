@@ -1,6 +1,6 @@
 
 #include "linkedList.h"
-
+#include "view.h"
 
 
 
@@ -376,4 +376,48 @@ void cleanMemory(FrameNode** head)
 	*head = NULL;
 }
 
+/*
+I don't know why, but I had to deckared copyHead outside of this function and send it with & otherwise it wouldn't work
+Input: the original list head and the copy list head (just a normal FrameNode initialized with NULl)
+Output: None
+*/
+void playReversed(FrameNode** head, FrameNode** copyHead)
+{
+	FrameNode* curr = *head;
+	FrameNode* currCopy = *copyHead;
 
+	FrameNode* prev = NULL;
+	FrameNode* next = NULL;
+
+	while (curr)  // create a copy of the original list.
+	{
+		currCopy = (FrameNode*)malloc(sizeof(FrameNode));
+		currCopy->frame = (Frame*)malloc(sizeof(Frame));
+		//copy frame:
+		currCopy->frame->name = (char*)malloc(sizeof(char)*STR_SIZE);
+		currCopy->frame->path = (char*)malloc(sizeof(char)*PATH_SIZE);
+
+		strncpy(currCopy->frame->name, curr->frame->name, STR_SIZE);
+		strncpy(currCopy->frame->path, curr->frame->path, PATH_SIZE);
+		currCopy->frame->duration = curr->frame->duration;
+
+		currCopy->next = NULL;
+		insertNode(copyHead, currCopy);
+
+		curr = curr->next;
+		currCopy = currCopy->next;
+	}
+	//reverse:
+	currCopy = *copyHead;
+	while (currCopy != NULL)
+	{
+		next = currCopy->next;
+		currCopy->next = prev;
+		prev = currCopy;
+		currCopy = next;
+	}
+	*copyHead = prev;
+
+	play(*copyHead);
+	cleanMemory(copyHead);
+}
